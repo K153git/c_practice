@@ -1,0 +1,31 @@
+给你两个正整数 a 和 b ，返回 a 和 b 的 公 因子的数目。
+
+如果 x 可以同时整除 a 和 b ，则认为 x 是 a 和 b 的一个 公因子 。
+
+int gcd(int a,int b)
+{
+    int c=0;
+    if(a<b)
+    {
+        a=a+b;
+        b=a-b;
+        a=a-b;
+    }
+    while(b!=0)
+    {
+        c=a%b;
+        a=b;
+        b=c;
+    }
+    return a; 
+}
+int commonFactors(int a, int b){
+    int g=gcd(a,b);
+    int tol=2;
+    if(g==1)
+        tol--;
+    for(int i=2;i<g;++i)
+        if(g%i==0)
+            tol++;
+    return tol;
+}
