@@ -1,0 +1,18 @@
+给你一个正整数数组 arr ，请你计算所有可能的奇数长度子数组的和。
+
+子数组 定义为原数组中的一个连续子序列。
+
+请你返回 arr 中 所有奇数长度子数组的和 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/sum-of-all-odd-length-subarrays
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+int sumOddLengthSubarrays(int* arr, int arrSize){
+    int sum=0;
+    for(int i=1;i<=arrSize;i+=2)
+        for(int j=0;j<arrSize;j++)
+            for(int k=0;j+i-1<arrSize&&k<i;k++)
+                sum+=arr[j+k];
+    return sum;
+}
