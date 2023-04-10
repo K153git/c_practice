@@ -1,0 +1,49 @@
+给定一个长度为 n 的链表 head
+
+对于列表中的每个节点，查找下一个 更大节点 的值。也就是说，对于每个节点，找到它旁边的第一个节点的值，这个节点的值 严格大于 它的值。
+
+返回一个整数数组 answer ，其
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/next-greater-node-in-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* nextLargerNodes(struct ListNode* head, int* returnSize){
+    int* ans=(int*)malloc(sizeof(int)*10001);
+    struct ListNode* now=head;
+    struct ListNode* p=NULL;
+    int num=0;
+    while(now)
+    {
+        p=now;
+        while(p && now->val>=p->val)
+        {
+            p=p->next;
+        }
+        if(p)
+        {
+            ans[num]=p->val;
+        }
+        else
+        {
+            ans[num]=0;
+        }
+        num++;
+        now=now->next;
+    }
+    ans[num]='\0';
+    *returnSize=num;
+    return ans;
+}
