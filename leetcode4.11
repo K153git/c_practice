@@ -1,0 +1,61 @@
+在无限的平面上，机器人最初位于 (0, 0) 处，面朝北方。注意:
+
+北方向 是y轴的正方向。
+南方向 是y轴的负方向。
+东方向 是x轴的正方向。
+西方向 是x轴的负方向。
+机器人可以接受下列三条指令之一：
+
+"G"：直走 1 个单位
+"L"：左转 90 度
+"R"：右转 90 度
+机器人按顺序执行指令 instructions，并一直重复它们。
+
+只有在平面中存在环使得机器人永远无法离开时，返回 true。否则，返回 false。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/robot-bounded-in-circle
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+bool isRobotBounded(char * instructions){
+    int i=0,j=0;
+    int *pl=(int*)malloc(sizeof(int)*3);
+    int *tw=(int*)malloc(sizeof(int)*3);
+    pl[0]=0;pl[1]=0;tw[0]=0;tw[1]=1;
+    for(j=0;j<4;++j)
+    {
+        for(i=0;i<strlen(instructions);++i)
+        {
+            switch (instructions[i])
+            {
+                case 'G':
+                    {
+                        pl[0]+=tw[0];
+                        pl[1]+=tw[1];
+                        break;
+                    }
+                case 'L':
+                    {
+                        tw[0]=tw[0]+tw[1];
+                        tw[1]=tw[0]-tw[1];
+                        tw[0]=tw[0]-tw[1];
+                        tw[1]=-tw[1];
+                        break;
+                    }
+                case 'R':
+                    {
+                        tw[0]=tw[0]+tw[1];
+                        tw[1]=tw[0]-tw[1];
+                        tw[0]=tw[0]-tw[1];
+                        tw[0]=-tw[0];
+                        break;
+                    }
+            }
+        }
+        if(pl[0]==0&&pl[1]==0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
