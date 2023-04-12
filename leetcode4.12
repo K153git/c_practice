@@ -1,0 +1,51 @@
+你会得到一个字符串 text 。你应该把它分成 k 个子字符串 (subtext1, subtext2，…， subtextk) ，要求满足:
+
+subtexti 是 非空 字符串
+所有子字符串的连接等于 text ( 即subtext1 + subtext2 + ... + subtextk == text )
+对于所有 i 的有效值( 即 1 <= i <= k ) ，subtexti == subtextk - i + 1 均成立
+返回k可能最大值。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/longest-chunked-palindrome-decomposition
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+int judice(char* text,int i,int j,int len)
+{
+    int k=0;
+    for(k=0;k<len;++k)
+    {
+        if(text[i+k]!=text[j+k])
+        {
+            return 0;
+        }
+    }
+    return 2;
+}
+int longestDecomposition(char * text){
+    int i=0,j=strlen(text)-1;
+    int ans=0;
+    int pre=j;
+    while(j>=i)
+    {
+        while(text[j]!=text[i])
+        {
+            --j;
+        }
+        if(judice(text,i,j,pre-j+1)==0)
+        {
+            j--;
+        }
+        else
+        {
+            ans+=2;
+            i=pre-j+i+1;
+            if(i==j)
+            {
+                return ans;
+            }
+            pre=--j;
+        }
+    }
+    ans--;
+    return ans;
+}
