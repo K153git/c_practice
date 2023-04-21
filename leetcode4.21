@@ -1,0 +1,61 @@
+给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+
+如果数组中不存在目标值 target，返回 [-1, -1]。
+
+你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+    int *res=(int*)malloc(sizeof(int)*3);
+    memset(res,-1,sizeof(int)*3);
+    int left=0,right=numsSize-1;
+    int mid=0,find=0;
+    while(left<=right)
+    {
+        mid=(left+right)/2;
+        if(nums[mid]>=target)
+        {
+            if(nums[mid]==target)
+            {
+                find=1;
+            }
+            right=mid-1;
+        }
+        else
+        {
+            left=mid+1;
+        }
+    }
+    if(find==0)
+    {
+        return res;
+    }
+    else
+    {
+        res[0]=left;
+        left=0;
+        right=numsSize-1;
+        while(left<=right)
+        {
+            mid=(left+right)/2;
+            if(nums[mid]>target)
+            {
+                right=mid-1;
+            }
+            else
+            {
+                left=mid+1;
+            }
+        }
+        res[1]=right;
+    }
+    *returnSize=2;
+    res[2]='\0';
+    return res;
+}
