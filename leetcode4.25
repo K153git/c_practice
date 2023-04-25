@@ -1,0 +1,67 @@
+给你一个字符串 s ，找出它的所有子串并按字典序排列，返回排在最后的那个子串。
+
+char * lastSubstring(char * s){
+    int poss,i,j=0,k,z=0;
+    poss=0;
+    while(j<strlen(s))
+    {
+        for(j=poss+1;j<strlen(s);++j)
+        {
+            if(s[j]>s[poss])
+            {
+                poss=j;
+                break;
+            }
+            else if(s[j]<s[poss])
+            {
+                continue;
+            }
+            else//要判断两个同起始符的哪个更后面了
+            {
+                for(k=1;j+k<strlen(s);++k)
+                {
+                    if(s[j+k]>s[poss])
+                    {
+                        poss=j+k;
+                        break;
+                    }
+                    else
+                    {
+                        if(s[j+k]<s[poss+k])
+                        {
+                            break;
+                        }
+                        else if(s[j+k]>s[poss+k])
+                        {
+                            poss=j;
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+                if(j+k==strlen(s))
+                {
+                    break;
+                }
+            }
+            if(poss==j+k||poss==j||j+k==strlen(s))
+            {
+                break;
+            }
+        }
+        if(j==strlen(s)||j+k==strlen(s))
+        {
+            break;
+        }
+    }
+    char *ans=(char*)malloc(sizeof(char)*(strlen(s)-poss+2));
+    for(;poss<strlen(s);++poss)
+    {
+        ans[z++]=s[poss];
+    }
+    ans[z]='\0';
+    return ans;
+}
