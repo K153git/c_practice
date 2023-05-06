@@ -1,0 +1,93 @@
+给你一个字符串 croakOfFrogs，它表示不同青蛙发出的蛙鸣声（字符串 "croak" ）的组合。由于同一时间可以有多只青蛙呱呱作响，所以 croakOfFrogs 中会混合多个 “croak” 。
+
+请你返回模拟字符串中所有蛙鸣所需不同青蛙的最少数目。
+
+要想发出蛙鸣 "croak"，青蛙必须 依序 输出 ‘c’, ’r’, ’o’, ’a’, ’k’ 这 5 个字母。如果没有输出全部五个字母，那么它就不会发出声音。如果字符串 croakOfFrogs 不是由若干有效的 "croak" 字符混合而成，请返回 -1 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/minimum-number-of-frogs-croaking
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+int minNumberOfFrogs(char * croakOfFrogs){
+    int cot[5]={0,0,0,0,0};
+    int i=0;
+    if(strlen(croakOfFrogs)%5!=0)
+    {
+        return -1;
+    }
+    for(i=0;i<strlen(croakOfFrogs);++i)
+    {
+        switch(croakOfFrogs[i])
+        {
+            case 'c':
+            {
+                if(cot[4]>0)
+                {
+                    cot[4]--;
+                }
+                cot[0]++;
+                break;
+            }
+            case 'r':
+            {
+                if(cot[0]>0)
+                {
+                    cot[0]--;
+                    cot[1]++;
+                }
+                else
+                {
+                    return -1;
+                }
+                break;
+            }
+            case 'o':
+            {
+                if(cot[1]>0)
+                {
+                    cot[1]--;
+                    cot[2]++;
+                }
+                else
+                {
+                    return -1;
+                }
+                break;
+            }
+            case 'a':
+            {
+                if(cot[2]>0)
+                {
+                    cot[2]--;
+                    cot[3]++;
+                }
+                else
+                {
+                    return -1;
+                }
+                break;
+            }
+            case 'k':
+            {
+                if(cot[3]>0)
+                {
+                    cot[3]--;
+                    cot[4]++;
+                }
+                else
+                {
+                    return -1;
+                }
+                break;
+            }
+        }
+    }
+    for(i=0;i<4;++i)
+    {
+        if(cot[i]!=0)
+        {
+            return -1;
+        }
+    }
+    return cot[4];
+}
