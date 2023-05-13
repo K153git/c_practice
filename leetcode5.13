@@ -1,0 +1,115 @@
+给你一个 不包含 任何零的整数数组 nums ，找出自身与对应的负数都在数组中存在的最大正整数 k 。
+
+返回正整数 k ，如果不存在这样的整数，返回 -1 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/largest-positive-integer-that-exists-with-its-negative
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+方法一 暴力搜索
+因为题目数据量不大，可以使用暴力搜索法看是否有互为相反数的两项，取能匹配的两项数的最大绝对值即可
+
+
+int findMaxK(int* nums, int numsSize){
+    int i,j,max=-1;
+    for(i=0;i<numsSize;++i)
+    {
+        for(j=i+1;j<numsSize;++j)
+        {
+            if(nums[i]+nums[j]==0)
+            {
+                max=fmax(max,abs(nums[i]));
+            }
+        }
+    }
+    return max;
+}
+方法二 哈希表
+还是与两数之和类似，题目可以转化为匹配项存在问题，可以建立哈希表记录某数是否出现，记录每个数时判断一下它的匹配项有没有出现，如果出现，就记录所有能匹配的项的最大绝对值。另外，哈希表的建立可以优化，因为我们要判断的是是否存在相反数，所以我们只用建立一半数据范围的哈希表，如果遍历到正数判断该数的负数有没有出现过也就是哈希表值是不是小于零，否则计数加一，遍历到负数反之，最后返回所有能匹配项的最大绝对值
+
+
+int findMaxK(int* nums, int numsSize){
+    int hash[1001]={0};
+    int i,max=-1;
+    for(i=0;i<numsSize;++i)
+    {
+        if(nums[i]>0)
+        {
+            if(hash[nums[i]]<0)
+            {
+                max=fmax(max,nums[i]);
+            }
+            else
+            {
+                hash[nums[i]]++;
+            }
+           
+        }
+        else
+        {
+            if(hash[-nums[i]]>0)
+            {
+                max=fmax(max,-nums[i]);
+            }
+            else
+            {
+                hash[-nums[i]]--;
+            }
+        }
+    }
+    return max;
+}
+方法三 排序+遍历
+因为题目中不包含零并且一对相反数的绝对值是相同的，所以我们可以先按照绝对值给nums数组降序排列，然后从前至后依次判断相邻两项满不满足互为相反数，如果满足，由于我们按绝对值从大到小遍历，直接返回第一组可以匹配的值即可
+
+
+int cmp(const void * a,const void * b)
+{
+    return abs(* (int *)b)-abs(* (int *)a);
+}
+int findMaxK(int* nums, int numsSize){
+    qsort(nums,numsSize,sizeof(int),cmp);
+    for(int i=0;i<numsSize-1;++i)
+    {
+        if(nums[i]+nums[i+1]==0)
+        {
+            return abs(nums[i]);
+        }
+    }
+    return -1;
+}
+方法四 排序+双指针
+先给nums数组升序排列，接着j从尾部（从大到小）开始，i从前部（从小到大）开始，寻找有没有nums[i]可以与nums[j]匹配，如果匹配因为j是从大到小遍历，直接返回nums[j]即可；如果不匹配需要注意，若nums[i]的绝对值已经小于nums[j],即i再增大已经不可能找到匹配nums[j]的项的，这时需要让j前移，但同时下一次过程i不能变化，因为这一次的i虽然不匹配j但可能匹配j-1，所以j前移时i需要减一
+
+
+int cmp(const void * a,const void * b)
+{
+    return *(int *)a-*(int *)b;
+}
+int findMaxK(int* nums, int numsSize){
+    int i=0,j=numsSize-1;
+    qsort(nums,numsSize,sizeof(int),cmp);
+    for(i=0;i<j&&nums[j]>0;++i)
+    {
+        if(nums[j]+nums[i]==0)
+        {
+            return nums[j];
+        }
+        if(0<nums[j]+nums[i])
+        {
+            j--;
+            i--;
+        }
+        else
+        {
+            continue;
+        }
+    }
+    return -1;
+}
+
+作者：vvonderful-bhaskaraqnf
+链接：https://leetcode.cn/problems/largest-positive-integer-that-exists-with-its-negative/solution/kai-kuo-si-lu-by-vvonderful-bhaskaraqnf-m466/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
